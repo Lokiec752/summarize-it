@@ -1,5 +1,6 @@
 import { useSession, signIn } from "next-auth/react";
 import Input from "../Input";
+import RecentlyAdded from "../RecentlyAdded";
 
 export default function Main() {
   const { data: session } = useSession();
@@ -30,6 +31,7 @@ export default function Main() {
             below:
           </h3>
           <Input />
+          <RecentlyAdded />
         </>
       )}
     </div>

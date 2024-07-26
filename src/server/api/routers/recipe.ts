@@ -4,9 +4,18 @@ import { webScrape } from "../services/webScrap";
 import { getSummary } from "../services/open-ai";
 import { extractNameFromUrl } from "~/utils/extractNameFromUrl";
 import { recipes } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const recipeRouter = createTRPCRouter({
+  getRecentlyAdded: protectedProcedure.query(async ({ ctx }) => {
+    const queryResult = await ctx.db
+      .select()
+      .from(recipes)
+      .orderBy(desc(recipes.createdAt))
+      .limit(5);
+
+    return queryResult.map((result) => result.name);
+  }),
   scrapeRecipe: protectedProcedure
     .input(z.object({ link: z.string().url() }))
     .mutation(async ({ input, ctx }) => {

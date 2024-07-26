@@ -4,14 +4,21 @@ import { api } from "~/utils/api";
 import Loading from "../Loading";
 
 export default function Input() {
+  const utils = api.useUtils();
   const {
     mutate: getSummary,
     isPending: isGettingSummary,
     data,
-  } = api.recipe.getSummary.useMutation();
+  } = api.recipe.getSummary.useMutation({
+    onSuccess: async () => {
+      await utils.recipe.getRecentlyAdded.invalidate();
+    },
+  });
   const { mutate: scrapeRecipe, isPending: isScraping } =
     api.recipe.scrapeRecipe.useMutation({
-      onSuccess: ({ recipeName: recipe }) => getSummary({ name: recipe ?? "" }),
+      onSuccess: ({ recipeName: recipe }) => {
+        getSummary({ name: recipe ?? "" });
+      },
     });
   // for testing purposes
   const defaultLink = "https://aniagotuje.pl/przepis/zupa-meksykanska";
