@@ -1,7 +1,7 @@
 import { type FormEvent } from "react";
 import Markdown from "react-markdown";
 import { api } from "~/utils/api";
-import Loading from "./Loading/Loading";
+import Loading from "../Loading";
 
 export default function Input() {
   const {
@@ -39,7 +39,7 @@ export default function Input() {
           <Markdown className="prose">{data.recipe}</Markdown>
         </div>
       )}
-      
+
       {isPending && <Loading />}
     </form>
   );

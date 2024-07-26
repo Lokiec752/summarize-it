@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 function getContent(text: string) {
-  return `Na podstawie tekstu, podaj zwięzły przepis w punktach. W pierwszej sekcji podaj wszystkie potrzebne składniki występujące w tekście. Tekst: ${text}`;
+  return `Na podstawie tekstu, podaj zwięzły przepis w punktach w formacie MD. W pierwszej sekcji podaj wszystkie potrzebne składniki występujące w tekście. Tekst: ${text}`;
 }
 
 export async function getSummary(text: string) {

@@ -1,12 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Input from "~/components/Input";
-
-import { api } from "~/utils/api";
+import HeaderBar from "~/components/HeaderBar";
+import Main from "~/components/Main";
 
 export default function Home() {
-  const { data: sessionData } = useSession();
-
   return (
     <>
       <Head>
@@ -15,47 +11,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        {true && (
-          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-              Summarize <span className="text-[hsl(280,100%,70%)]">it!</span>
-            </h1>
-            <h3 className="text-2xl text-white">
-              Paste your url from{" "}
-              <a href="https://aniagotuje.pl" target="blank">
-                <span className="text-[hsl(280,100%,70%)]">aniagotuje.pl</span>
-              </a>{" "}
-              below:
-            </h3>
-            <Input />
-          </div>
-        )}
-        <AuthShowcase />
+        <HeaderBar />
+        <Main />
       </main>
     </>
-  );
-}
-
-function AuthShowcase() {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
   );
 }
