@@ -12,6 +12,7 @@ export default function Input() {
     data,
   } = api.recipe.getSummary.useMutation({
     onSuccess: async () => {
+      await utils.recipe.getSummariesLeftForUser.invalidate();
       await utils.recipe.getRecentlyAdded.invalidate();
     },
   });
@@ -21,8 +22,7 @@ export default function Input() {
         getSummary({ name: recipe ?? "" });
       },
     });
-  // for testing purposes
-  const defaultLink = "https://aniagotuje.pl/przepis/zupa-meksykanska";
+  const { data: summariesLeft } = api.recipe.getSummariesLeftForUser.useQuery();
   const isLoading = isScraping || isGettingSummary;
   return (
     <form
@@ -35,18 +35,33 @@ export default function Input() {
         scrapeRecipe({ link });
       }}
     >
-      <div className="flex gap-2">
-        <input
-          className="w-full max-w-lg rounded-md bg-white p-2 text-lg text-black"
-          type="text"
-          name="link"
-          placeholder="Wklej link"
-          defaultValue={defaultLink}
-        />
-        <button type="submit" className="rounded-md bg-blue-500 p-2 text-white">
-          Submit
-        </button>
-      </div>
+      {summariesLeft !== 0 && (
+        <div className="flex flex-col">
+          <div className="flex gap-2">
+            <input
+              className="w-full max-w-lg rounded-md bg-white p-2 text-lg text-black"
+              type="text"
+              name="link"
+              placeholder="Paste link here"
+            />
+            <button
+              type="submit"
+              className="rounded-md bg-blue-500 p-2 text-white"
+            >
+              Submit
+            </button>
+          </div>
+          <div className="flex justify-center text-white">
+            Summaries left today: {summariesLeft}
+          </div>
+        </div>
+      )}
+      {summariesLeft === 0 && (
+        <div className="text-center text-purple-600">
+          You have reached the limit of summaries for today. Please try again
+          tomorrow 👋
+        </div>
+      )}
       {isScraping && <Loading text="Scrapping the recipe" />}
       {!isScraping && isGettingSummary && (
         <Loading text="Computing the summary" />

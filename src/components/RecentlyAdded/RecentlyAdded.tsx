@@ -5,7 +5,7 @@ export default function RecentlyAdded() {
   const { data } = api.recipe.getRecentlyAdded.useQuery();
   if (data?.length === 0) return null;
   return (
-    <div>
+    <div className="fixed bottom-4">
       <h3 className="text-2xl text-white">Recently added recipes: </h3>
       <ul className="flex flex-col items-center text-white">
         {data?.map((recipe) => (

@@ -70,6 +70,9 @@ export const recipes = createTable("recipe", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
+  createdBy: varchar("created_by", { length: 255 })
+    .notNull()
+    .references(() => users.id),
 });
 
 export const recipesRelations = relations(recipes, ({ one }) => ({

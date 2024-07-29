@@ -8,8 +8,8 @@ export default function HeaderBar() {
       <Link className="text-2xl font-semibold text-white" href={"/"}>
         Summarize
       </Link>
-      <div className="flex items-center gap-4">
-        <Link className="text-white" href={"/recipes/all"}>
+      <div>
+        <Link className="mr-2 text-white" href={"/recipes/all"}>
           All recipes
         </Link>
         <button

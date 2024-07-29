@@ -6,13 +6,16 @@ import { extractNameFromUrl } from "~/utils/extractNameFromUrl";
 import { recipes } from "~/server/db/schema";
 import { desc, eq } from "drizzle-orm";
 
+const RECENTLY_ADDED_LIMIT = 3;
+const SUMMARIES_DAILY_LIMIT = 5;
+
 export const recipeRouter = createTRPCRouter({
   getRecentlyAdded: protectedProcedure.query(async ({ ctx }) => {
     const queryResult = await ctx.db
       .select()
       .from(recipes)
       .orderBy(desc(recipes.createdAt))
-      .limit(5);
+      .limit(RECENTLY_ADDED_LIMIT);
 
     return queryResult.map((result) => result.name);
   }),
@@ -37,6 +40,7 @@ export const recipeRouter = createTRPCRouter({
         name: recipeName,
         url: input.link,
         recipe: fullRecipe,
+        createdBy: ctx.session.user.id,
       });
 
       return {
@@ -47,7 +51,6 @@ export const recipeRouter = createTRPCRouter({
   getSummary: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ input, ctx }) => {
-      console.log(input);
       const queryResult = await ctx.db
         .select()
         .from(recipes)
@@ -83,4 +86,13 @@ export const recipeRouter = createTRPCRouter({
         summary: updatedResult[0]?.summary ?? "No summary found",
       };
     }),
+  getSummariesLeftForUser: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+    const queryResult = await ctx.db
+      .select()
+      .from(recipes)
+      .where(eq(recipes.createdBy, userId));
+
+    return SUMMARIES_DAILY_LIMIT - queryResult.length;
+  }),
 });
