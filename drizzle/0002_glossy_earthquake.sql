@@ -1,0 +1,1 @@
+DROP TABLE `summarize-it_post`;

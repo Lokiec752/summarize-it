@@ -88,11 +88,13 @@ export const recipeRouter = createTRPCRouter({
     }),
   getSummariesLeftForUser: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user.id;
+    const isAdmin = ctx.session.user.role === "admin";
+    console.log("isAdmin", ctx.session.user);
     const queryResult = await ctx.db
       .select()
       .from(recipes)
       .where(eq(recipes.createdBy, userId));
 
-    return SUMMARIES_DAILY_LIMIT - queryResult.length;
+    return isAdmin ? 1 : SUMMARIES_DAILY_LIMIT - queryResult.length;
   }),
 });
