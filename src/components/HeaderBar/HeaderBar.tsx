@@ -5,7 +5,7 @@ export default function HeaderBar() {
   const { data: sessionData } = useSession();
   return (
     <header className="fixed left-0 top-0 flex w-full items-center justify-between bg-purple-600 px-4 py-2 backdrop-blur-md">
-      <Link className="text-2xl font-semibold text-white" href={"/"}>
+      <Link className="text-xl font-semibold text-white sm:text-2xl" href={"/"}>
         Summarize
       </Link>
       <div>
@@ -13,7 +13,7 @@ export default function HeaderBar() {
           All recipes
         </Link>
         <button
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          className="rounded-full bg-white/10 px-5 py-3 font-semibold text-white no-underline transition hover:bg-white/20 sm:px-10"
           onClick={sessionData ? () => void signOut() : () => void signIn()}
         >
           {sessionData ? "Sign out" : "Sign in"}
