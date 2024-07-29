@@ -62,7 +62,7 @@ export const recipes = createTable("recipe", {
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: varchar("name", { length: 256 }),
+  name: varchar("name", { length: 256 }).notNull(),
   url: varchar("url", { length: 256 }),
   recipe: text("recipe"),
   summary: text("summary"),
