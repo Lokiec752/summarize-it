@@ -13,15 +13,6 @@ CREATE TABLE `summarize-it_account` (
 	CONSTRAINT `summarize-it_account_provider_provider_account_id_pk` PRIMARY KEY(`provider`,`provider_account_id`)
 );
 --> statement-breakpoint
-CREATE TABLE `summarize-it_post` (
-	`id` bigint AUTO_INCREMENT NOT NULL,
-	`name` varchar(256),
-	`created_by` varchar(255) NOT NULL,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` timestamp ON UPDATE CURRENT_TIMESTAMP,
-	CONSTRAINT `summarize-it_post_id` PRIMARY KEY(`id`)
-);
---> statement-breakpoint
 CREATE TABLE `summarize-it_recipe` (
 	`id` varchar(255) NOT NULL,
 	`name` varchar(256),
@@ -57,9 +48,6 @@ CREATE TABLE `summarize-it_verification_token` (
 );
 --> statement-breakpoint
 ALTER TABLE `summarize-it_account` ADD CONSTRAINT `summarize-it_account_user_id_summarize-it_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `summarize-it_user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `summarize-it_post` ADD CONSTRAINT `summarize-it_post_created_by_summarize-it_user_id_fk` FOREIGN KEY (`created_by`) REFERENCES `summarize-it_user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `summarize-it_session` ADD CONSTRAINT `summarize-it_session_user_id_summarize-it_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `summarize-it_user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX `account_user_id_idx` ON `summarize-it_account` (`user_id`);--> statement-breakpoint
-CREATE INDEX `created_by_idx` ON `summarize-it_post` (`created_by`);--> statement-breakpoint
-CREATE INDEX `name_idx` ON `summarize-it_post` (`name`);--> statement-breakpoint
 CREATE INDEX `session_user_id_idx` ON `summarize-it_session` (`user_id`);
