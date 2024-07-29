@@ -1,7 +1,8 @@
 import { type FormEvent } from "react";
 import Markdown from "react-markdown";
-import { api } from "~/utils/api";
 import Loading from "../Loading";
+import Container from "~/components/Container";
+import { api } from "~/utils/api";
 
 export default function Input() {
   const utils = api.useUtils();
@@ -51,9 +52,9 @@ export default function Input() {
         <Loading text="Computing the summary" />
       )}
       {!isLoading && data && (
-        <div className="rounded-md bg-purple-300 p-2 text-white">
+        <Container>
           <Markdown className="prose">{data.summary}</Markdown>
-        </div>
+        </Container>
       )}
     </form>
   );

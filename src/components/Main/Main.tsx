@@ -1,6 +1,7 @@
 import { useSession, signIn } from "next-auth/react";
 import Input from "../Input";
 import RecentlyAdded from "../RecentlyAdded";
+import Link from "next/link";
 
 export default function Main() {
   const { data: session } = useSession();
@@ -11,15 +12,23 @@ export default function Main() {
         Summarize <span className="text-[hsl(280,100%,70%)]">it!</span>
       </h1>
       {!session && (
-        <h1 className="text-2xl text-white">
-          Please{" "}
-          <button
-            className="text-[hsl(280,100%,70%)]"
-            onClick={() => void signIn()}
-          >
-            sign in
-          </button>
-        </h1>
+        <div className="flex flex-col items-center gap-16">
+          <h1 className="text-2xl text-white">
+            Please{" "}
+            <button
+              className="text-[hsl(280,100%,70%)]"
+              onClick={() => void signIn()}
+            >
+              sign in
+            </button>
+          </h1>
+          <h1 className="text-2xl text-white">
+            ...or search already added{" "}
+            <Link className="text-[hsl(280,100%,70%)]" href={"/recipes/all"}>
+              summaries
+            </Link>
+          </h1>
+        </div>
       )}
       {session && (
         <>
