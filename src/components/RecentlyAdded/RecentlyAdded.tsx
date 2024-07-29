@@ -3,6 +3,7 @@ import { api } from "~/utils/api";
 
 export default function RecentlyAdded() {
   const { data } = api.recipe.getRecentlyAdded.useQuery();
+  if (data?.length === 0) return null;
   return (
     <div>
       <h3 className="text-2xl text-white">Recently added recipes: </h3>

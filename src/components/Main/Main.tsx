@@ -32,7 +32,7 @@ export default function Main() {
       )}
       {session && (
         <>
-          <h3 className="text-2xl text-white">
+          <h3 className="text-center text-2xl text-white">
             Paste your url from{" "}
             <a href="https://aniagotuje.pl" target="blank">
               <span className="text-[hsl(280,100%,70%)]">aniagotuje.pl</span>
