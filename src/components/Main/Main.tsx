@@ -3,9 +3,10 @@ import Input from "../Input";
 import RecentlyAdded from "../RecentlyAdded";
 import Link from "next/link";
 import { api } from "~/utils/api";
+import Loading from "../Loading";
 
 export default function Main() {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const utils = api.useUtils();
   const {
     mutate: getSummary,
@@ -23,8 +24,10 @@ export default function Main() {
         getSummary({ name: recipe ?? "" });
       },
     });
-  const { data: summariesLeft } = api.recipe.getSummariesLeftForUser.useQuery();
-  const isLoading = isScraping || isGettingSummary;
+  const { data: summariesLeft, isLoading: isSummariesLeftLoading } =
+    api.recipe.getSummariesLeftForUser.useQuery();
+
+  const sessionLoading = sessionStatus === "loading";
 
   return (
     <div
@@ -33,7 +36,8 @@ export default function Main() {
       <h1 className="text-center text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
         Summarize <span className="text-[hsl(280,100%,70%)]">it!</span>
       </h1>
-      {!session && (
+      {sessionLoading && <Loading />}
+      {!sessionLoading && !session && (
         <div className="flex flex-col items-center gap-16">
           <h1 className="text-xl text-white sm:text-2xl">
             Please{" "}
@@ -52,7 +56,7 @@ export default function Main() {
           </h1>
         </div>
       )}
-      {session && (
+      {!sessionLoading && session && (
         <>
           <div className="relative flex flex-col gap-4">
             <h3 className="text-center text-2xl text-white">
@@ -65,13 +69,16 @@ export default function Main() {
             <Input
               data={data ?? null}
               isGettingSummary={isGettingSummary}
-              isLoading={isLoading}
+              isLoading={isSummariesLeftLoading}
               isScraping={isScraping}
               scrapeRecipe={scrapeRecipe}
               summariesLeft={summariesLeft ?? 0}
             />
           </div>
-          <RecentlyAdded position={data?.summary ? "relative" : "absolute"} />
+          <RecentlyAdded
+            position={data?.summary ? "relative" : "absolute"}
+            isLoading={isGettingSummary}
+          />
         </>
       )}
     </div>

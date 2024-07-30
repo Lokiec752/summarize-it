@@ -1,13 +1,19 @@
 import Link from "next/link";
 import { api } from "~/utils/api";
+import Loading from "../Loading";
 
 export default function RecentlyAdded({
   position,
+  isLoading,
 }: {
   position: "relative" | "absolute";
+  isLoading: boolean;
 }) {
   const { data: recentRecipes } = api.recipe.getRecentlyAdded.useQuery();
+
+  if (isLoading) return <Loading />;
   if (recentRecipes?.length === 0) return null;
+
   return (
     <div className={`${position} bottom-4 left-0 flex w-full flex-col gap-4`}>
       <h3 className="text-center text-2xl text-white">

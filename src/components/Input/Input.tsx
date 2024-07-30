@@ -20,6 +20,10 @@ export default function Input({
   summariesLeft,
   scrapeRecipe,
 }: InputProps) {
+  const isComputingSummary = isScraping || isGettingSummary;
+
+  if (isLoading) return <Loading />;
+
   return (
     <form
       className="flex flex-col items-center gap-6"
@@ -62,7 +66,7 @@ export default function Input({
       {!isScraping && isGettingSummary && (
         <Loading text="Computing the summary" />
       )}
-      {!isLoading && data && (
+      {!isComputingSummary && data && (
         <Container>
           <Markdown className="prose">{data.summary}</Markdown>
         </Container>
