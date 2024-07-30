@@ -75,10 +75,7 @@ export default function Main() {
               summariesLeft={summariesLeft ?? 0}
             />
           </div>
-          <RecentlyAdded
-            position={data?.summary ? "relative" : "absolute"}
-            isLoading={isGettingSummary}
-          />
+          <RecentlyAdded position={data?.summary ? "relative" : "absolute"} />
         </>
       )}
     </div>

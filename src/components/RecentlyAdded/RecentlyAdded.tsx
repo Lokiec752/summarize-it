@@ -4,12 +4,11 @@ import Loading from "../Loading";
 
 export default function RecentlyAdded({
   position,
-  isLoading,
 }: {
   position: "relative" | "absolute";
-  isLoading: boolean;
 }) {
-  const { data: recentRecipes } = api.recipe.getRecentlyAdded.useQuery();
+  const { data: recentRecipes, isLoading } =
+    api.recipe.getRecentlyAdded.useQuery();
 
   if (isLoading) return <Loading />;
   if (recentRecipes?.length === 0) return null;
