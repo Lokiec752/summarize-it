@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { webScrape } from "../services/webScrap";
 import { getSummary } from "../services/open-ai";
 import { extractNameFromUrl } from "~/utils/extractNameFromUrl";
@@ -10,6 +14,10 @@ const RECENTLY_ADDED_LIMIT = 3;
 const SUMMARIES_DAILY_LIMIT = 5;
 
 export const recipeRouter = createTRPCRouter({
+  getAllRecipeNames: publicProcedure.query(async ({ ctx }) => {
+    const queryResult = await ctx.db.select().from(recipes);
+    return queryResult.map((result) => result.name);
+  }),
   getRecentlyAdded: protectedProcedure.query(async ({ ctx }) => {
     const queryResult = await ctx.db
       .select()

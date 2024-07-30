@@ -89,5 +89,6 @@ export const getStaticProps: GetStaticProps<
         updatedAt: recipe.updatedAt?.toISOString() ?? null,
       },
     },
+    revalidate: 60,
   };
 };

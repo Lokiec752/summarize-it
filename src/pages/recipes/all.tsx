@@ -1,15 +1,15 @@
-import { type InferSelectModel } from "drizzle-orm";
-import { type GetStaticProps } from "next";
-import { db } from "~/server/db";
-import { recipes } from "~/server/db/schema";
-
-type Recipes = Pick<InferSelectModel<typeof recipes>, "name">;
-
 import Layout from "~/components/Layout";
 import Link from "next/link";
 import Head from "next/head";
+import { api } from "~/utils/api";
+import Loading from "~/components/Loading";
 
-export default function All({ allRecipes }: { allRecipes: Recipes[] }) {
+export default function All() {
+  const { data, isLoading } = api.recipe.getAllRecipeNames.useQuery();
+  const allRecipes = data ?? [];
+
+  if (isLoading) return <Loading />;
+
   return (
     <Layout>
       <Head>
@@ -21,9 +21,9 @@ export default function All({ allRecipes }: { allRecipes: Recipes[] }) {
         <p className="text-white">No recipes found</p>
       ) : (
         <ul className="text-xl text-white">
-          {allRecipes.map((recipe) => (
-            <li key={recipe.name} className="underline">
-              <Link href={recipe.name}>{recipe.name.split("-").join(" ")}</Link>
+          {allRecipes.map((name) => (
+            <li key={name} className="underline">
+              <Link href={name}>{name.split("-").join(" ")}</Link>
             </li>
           ))}
         </ul>
@@ -31,16 +31,3 @@ export default function All({ allRecipes }: { allRecipes: Recipes[] }) {
     </Layout>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  const allRecipes = await db
-    .select({
-      name: recipes.name,
-    })
-    .from(recipes);
-  return {
-    props: {
-      allRecipes,
-    },
-  };
-};
