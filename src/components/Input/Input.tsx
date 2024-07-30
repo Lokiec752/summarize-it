@@ -2,28 +2,24 @@ import { type FormEvent } from "react";
 import Markdown from "react-markdown";
 import Loading from "../Loading";
 import Container from "~/components/Container";
-import { api } from "~/utils/api";
 
-export default function Input() {
-  const utils = api.useUtils();
-  const {
-    mutate: getSummary,
-    isPending: isGettingSummary,
-    data,
-  } = api.recipe.getSummary.useMutation({
-    onSuccess: async () => {
-      await utils.recipe.getSummariesLeftForUser.invalidate();
-      await utils.recipe.getRecentlyAdded.invalidate();
-    },
-  });
-  const { mutate: scrapeRecipe, isPending: isScraping } =
-    api.recipe.scrapeRecipe.useMutation({
-      onSuccess: ({ recipeName: recipe }) => {
-        getSummary({ name: recipe ?? "" });
-      },
-    });
-  const { data: summariesLeft } = api.recipe.getSummariesLeftForUser.useQuery();
-  const isLoading = isScraping || isGettingSummary;
+type InputProps = {
+  summariesLeft: number;
+  data: { summary: string } | null;
+  isScraping: boolean;
+  isGettingSummary: boolean;
+  isLoading: boolean;
+  scrapeRecipe: (input: { link: string }) => void;
+};
+
+export default function Input({
+  data,
+  isGettingSummary,
+  isScraping,
+  isLoading,
+  summariesLeft,
+  scrapeRecipe,
+}: InputProps) {
   return (
     <form
       className="flex flex-col items-center gap-6"

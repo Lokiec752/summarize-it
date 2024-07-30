@@ -32,11 +32,15 @@ export default function RecipePage({ recipe }: { recipe: Recipe }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="mt-20 pb-5 text-center text-5xl font-extrabold tracking-tight text-white 2xl:mt-28">
-        {recipe.name}
+        {recipe.name.split("-").join(" ")}
       </h1>
       <p className="m-2 text-center text-white">
         Original link:{" "}
-        <Link className="text" href={recipe.url ?? ""} target="_blank">
+        <Link
+          className="text text-purple-300"
+          href={recipe.url ?? ""}
+          target="_blank"
+        >
           {recipe.url}
         </Link>
       </p>

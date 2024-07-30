@@ -23,7 +23,7 @@ export default function All({ allRecipes }: { allRecipes: Recipes[] }) {
         <ul className="text-xl text-white">
           {allRecipes.map((recipe) => (
             <li key={recipe.name} className="underline">
-              <Link href={recipe.name}>{recipe.name}</Link>
+              <Link href={recipe.name}>{recipe.name.split("-").join(" ")}</Link>
             </li>
           ))}
         </ul>
