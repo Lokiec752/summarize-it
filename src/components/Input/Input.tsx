@@ -9,6 +9,7 @@ type InputProps = {
   isScraping: boolean;
   isGettingSummary: boolean;
   isLoading: boolean;
+  isError: boolean;
   scrapeRecipe: (input: { link: string }) => void;
 };
 
@@ -17,6 +18,7 @@ export default function Input({
   isGettingSummary,
   isScraping,
   isLoading,
+  isError,
   summariesLeft,
   scrapeRecipe,
 }: InputProps) {
@@ -71,6 +73,7 @@ export default function Input({
           <Markdown className="prose">{data.summary}</Markdown>
         </Container>
       )}
+      {isError && <p className="text-red-600">Error, please try again</p>}
     </form>
   );
 }

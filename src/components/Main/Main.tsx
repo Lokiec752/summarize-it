@@ -10,6 +10,7 @@ export default function Main() {
   const {
     mutate: getSummary,
     isPending: isGettingSummary,
+    isError: isSummaryError,
     data,
   } = api.recipe.getSummary.useMutation({
     onSuccess: async () => {
@@ -17,16 +18,20 @@ export default function Main() {
       await utils.recipe.getRecentlyAdded.invalidate();
     },
   });
-  const { mutate: scrapeRecipe, isPending: isScraping } =
-    api.recipe.scrapeRecipe.useMutation({
-      onSuccess: ({ recipeName: recipe }) => {
-        getSummary({ name: recipe ?? "" });
-      },
-    });
+  const {
+    mutate: scrapeRecipe,
+    isPending: isScraping,
+    isError: isScrapeError,
+  } = api.recipe.scrapeRecipe.useMutation({
+    onSuccess: ({ recipeName: recipe }) => {
+      getSummary({ name: recipe ?? "" });
+    },
+  });
   const { data: summariesLeft, isLoading: isSummariesLeftLoading } =
     api.recipe.getSummariesLeftForUser.useQuery();
 
   const sessionLoading = sessionStatus === "loading";
+  const isError = isSummaryError || isScrapeError;
 
   return (
     <div
@@ -70,6 +75,7 @@ export default function Main() {
               isGettingSummary={isGettingSummary}
               isLoading={isSummariesLeftLoading}
               isScraping={isScraping}
+              isError={isError}
               scrapeRecipe={scrapeRecipe}
               summariesLeft={summariesLeft ?? 0}
             />
