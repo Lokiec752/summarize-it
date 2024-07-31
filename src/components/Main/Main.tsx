@@ -1,6 +1,5 @@
 import { useSession, signIn } from "next-auth/react";
 import Input from "../Input";
-import RecentlyAdded from "../RecentlyAdded";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import Loading from "../Loading";
@@ -75,7 +74,6 @@ export default function Main() {
               summariesLeft={summariesLeft ?? 0}
             />
           </div>
-          <RecentlyAdded position={data?.summary ? "relative" : "absolute"} />
         </>
       )}
     </div>
